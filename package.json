@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "bin": {
+    "vkgraph": "./bin/vkgraph"
+  },
   "scripts": {
     "test": "node_modules/mocha/bin/mocha",
     "start": "node server.js"
@@ -32,7 +35,12 @@
     "gulp-typescript": "^3.1.5",
     "mocha": "^3.2.0",
     "typescript": "^2.2.1",
-    "@types/node": "^7.0.0"
+    "merge2": "^1.0.3",
+    "gulp": "^3.9.1",
+    "del": "^2.2.2",
+    "jison": "^0.4.17",
+    "@types/node": "^7.0.0",
+    "run-sequence": "^1.2.2"
   },
   "dependencies": {
     "lodash": "^4.17.4",

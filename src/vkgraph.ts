@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import VK from './vk';
+import * as _ from 'lodash';
+import * as VK from './vk';
 
 const DELAY_BETWEEN_REQUESTS = 1000;
 
@@ -37,12 +37,12 @@ export default class Graph {
     }
   }
 
-  private numUsersInGraph() {
+  public numUsersInGraph() {
     if (!this.graph) return this.graph().nodes.length;
   }
 
   public start() {
-    const trav = new VK.Traverser(VK.requester);
+    const trav = new VK.Traverser();
 
     trav.enqueue(this.startingUserId, this.depth);
 

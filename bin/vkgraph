@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 
-const VKGraph = require('../lib/vkgraph');
+const VKGraph = require('../lib/vkgraph').default;
 
 const args = require('minimist')(process.argv.slice(2), {
   boolean: ['includeStartingUser']
 });
 
-var graph = VKGraph();
+var graph = new VKGraph({
+  startingUserId: 10964752,
+  depth: 1,
+  includeStartingUser: args.includeStartingUser
+});
 
+console.log(args);
 
+graph.start();

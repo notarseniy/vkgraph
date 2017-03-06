@@ -1,7 +1,7 @@
-import appConfig from '../config.json';
+const appConfig = require('../config.json');
 
-import _ from 'lodash';
-import VKApi from 'node-vkapi';
+import * as _ from 'lodash';
+import * as VKApi from 'node-vkapi';
 
 declare var __ARGS__: any;
 declare var __DETAILED__: any;
@@ -27,7 +27,57 @@ export class Traverser {
   queue: Queue[] = [];
   queuedIds: QueuedIds = {};
 
-  requester: any;
+  requester(requests, is_detailed, on_result) {
+    let code = ('' + function () {
+      var fields;
+      var args = [__ARGS__];
+      var is_detailed = [__DETAILED__];
+      var results = [];
+      var i = 0;
+      
+      while (i<args.length) {
+        if (is_detailed[i]) {
+          fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation";
+        } else {
+          fields = "";
+        }
+        results.push(API.friends.get({fields:fields, uid: args[i]}));
+
+        i = i + 1;
+      }
+      return results;
+    });
+
+    code = code.replace('function () {', '');
+    code = code.slice(0, code.length - 1);
+    code = code.replace('__ARGS__', requests.map(function (el) { return el.id; }));
+    code = code.replace('__DETAILED__', is_detailed);
+
+    console.log('HEY', code, requests);
+    
+    VK.call('execute', {code: code}, function (data) {
+      console.log('execute', data, is_detailed);
+      
+      if(data.response !== undefined) {
+        var items = [];
+        for (var i = 0; i < data.response.length; i++) {
+          if (!is_detailed[i]) {
+            items.push(_.map(data.response[i], function(id) {return {id: id}}));
+          } else {
+            items.push(_.map(data.response[i], function(u) {
+              u.id = u.uid;
+              return u;
+            }));
+          }
+        }
+        on_result(items);
+      } else {
+        console.error("Received error: ", data)
+        // FIXME: handle error, not just ignore it
+        on_result([])
+      }
+    });
+  }
 
   enqueue(id, levels) {
     this.queue.push({
@@ -151,54 +201,4 @@ export function toGraph(friends, links, exclude_ids) {
 	}
 }
 
-export function requester(requests, is_detailed, on_result) {
-  let code = ('' + function () {
-    var fields;
-    var args = [__ARGS__];
-    var is_detailed = [__DETAILED__];
-    var results = [];
-    var i = 0;
-    
-    while (i<args.length) {
-      if (is_detailed[i]) {
-        fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation";
-      } else {
-        fields = "";
-      }
-      results.push(API.friends.get({fields:fields, uid: args[i]}));
-
-      i = i + 1;
-    }
-    return results;
-  });
-
-  code = code.replace('function () {', '');
-  code = code.slice(0, code.length - 1);
-  code = code.replace('__ARGS__', requests.map(function (el) { return el.id; }));
-  code = code.replace('__DETAILED__', is_detailed);
-
-  console.log('HEY', code, requests);
-  
-  VKApi.call('execute', {code: code}, function (data) {
-    console.log('execute', data, is_detailed);
-    
-		if(data.response !== undefined) {
-      var items = [];
-      for (var i = 0; i < data.response.length; i++) {
-        if (!is_detailed[i]) {
-          items.push(_.map(data.response[i], function(id) {return {id: id}}));
-        } else {
-          items.push(_.map(data.response[i], function(u) {
-            u.id = u.uid;
-            return u;
-          }));
-        }
-      }
-			on_result(items);
-		} else {
-			console.error("Received error: ", data)
-			// FIXME: handle error, not just ignore it
-			on_result([])
-		}
-	});
-}
+export function 
