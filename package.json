@@ -1,0 +1,43 @@
+{
+  "name": "vkgraph",
+  "version": "0.1.0",
+  "description": "Generate Gephi graph from VK",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/notarseniy/vkgraph.git"
+  },
+  "keywords": [
+    "vk",
+    "graph",
+    "gephi",
+    "statistics",
+    "data-mining"
+  ],
+  "author": "Arseniy Maximov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/notarseniy/vkgraph/issues"
+  },
+  "homepage": "https://github.com/notarseniy/vkgraph#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.5",
+    "mocha": "^3.2.0",
+    "typescript": "^2.2.1",
+    "@types/node": "^7.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
+    "node-vkapi": "^2.1.0",
+    "xml-writer": "^1.7.0"
+  }
+}

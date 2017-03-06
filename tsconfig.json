@@ -1,0 +1,13 @@
+{
+  "include": [
+    "src/**/*"
+  ],
+  "filesGlob": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "allowJs": true,
+    "target": "es5"
+  }
+}
